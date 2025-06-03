@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>เข้าสู่เว็บย่อยด้วยรหัส</title>
+</head>
+<body>
+  <h2>กรอกรหัสเพื่อเข้าสู่เว็บย่อย</h2>
+  <input type="text" id="code" placeholder="ใส่รหัส เช่น project1">
+  <button onclick="go()">เข้าสู่หน้า</button>
+  <div id="msg" style="color:red;"></div>
+
+  <script>
+    // Map รหัส → URL (แก้ไขได้ตามต้องการ)
+    const codeMap = {
+      "project1": "project1/index.html",
+      "project2": "project2/index.html",
+      "docs":     "docs/index.html"
+    };
+
+    function go() {
+      const code = document.getElementById('code').value.trim();
+      if (codeMap[code]) {
+        window.location.href = codeMap[code];
+      } else {
+        document.getElementById('msg').textContent = "รหัสไม่ถูกต้อง หรือยังไม่มีข้อมูล";
+      }
+    }
+  </script>
+</body>
+</html>
