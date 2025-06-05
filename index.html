@@ -2,20 +2,120 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>เข้าสู่เว็บย่อยด้วยรหัส</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบบาร์โค้ด สถานีตำรวจภูธรพยัคฆภูมิพิสัย</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Kanit', sans-serif;
+      background: linear-gradient(135deg, #78C1E5, #5A9FD6, #3A7D7C);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: rgba(255,255,255,0.97);
+      padding: 48px 32px 36px;
+      border-radius: 16px;
+      box-shadow: 0px 5px 15px rgba(0,0,0,0.15);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    .header-logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: #215c8b;
+    }
+    h2 {
+      margin: 0 0 28px;
+      font-size: 1rem;
+      font-weight: 400;
+      color: #46637f;
+      letter-spacing: 1px;
+    }
+    .input-group {
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      border: 1px solid #b4d2e7;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      background: #f6fbff;
+      color: #333;
+    }
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, #78C1E5, #5A9FD6);
+      color: #fff;
+      border: none;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 12px;
+    }
+    .btn:hover {
+      background: linear-gradient(135deg, #5A9FD6, #78C1E5);
+    }
+    .error {
+      color: #d14;
+      font-size: 1rem;
+      min-height: 24px;
+      margin-bottom: 8px;
+    }
+    .footer {
+      margin-top: 24px;
+      color: #46637f;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+  </style>
 </head>
 <body>
-  <h2>กรอกรหัสเพื่อเข้าสู่เว็บย่อย</h2>
-  <input type="text" id="code" placeholder="ใส่รหัส เช่น project1">
-  <button onclick="go()">เข้าสู่หน้า</button>
-  <div id="msg" style="color:red;"></div>
-
+  <div class="container">
+    <!-- ถ้ามีโลโก้สถานี ให้ใส่ <img src="logo.png" class="header-logo" alt="logo"> -->
+    <h1>ระบบสร้างบาร์โค้ด<br>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</h1>
+    <h2>PHAYAKKHAPHUMPHISAI POLICE STATION</h2>
+    <div class="input-group">
+      <label for="code">กรอกรหัสโปรเจกต์/เมนู</label>
+      <input type="text" id="code" placeholder="เช่น project1, project2, docs">
+      <div id="msg" class="error"></div>
+    </div>
+    <button class="btn" onclick="go()">เข้าสู่ระบบ</button>
+    <div class="footer">
+      © 2025 สิบตำรวจเอก นพรัตน์ ผิวนวล
+    </div>
+  </div>
   <script>
-    // Map รหัส → URL (แก้ไขได้ตามต้องการ)
+    // รหัสและลิงก์
     const codeMap = {
       "project1": "project1/index.html",
       "project2": "project2/index.html",
       "docs":     "docs/index.html"
+      // เพิ่มรหัสอื่นได้ที่นี่
     };
 
     function go() {
@@ -23,9 +123,13 @@
       if (codeMap[code]) {
         window.location.href = codeMap[code];
       } else {
-        document.getElementById('msg').textContent = "รหัสไม่ถูกต้อง หรือยังไม่มีข้อมูล";
+        document.getElementById('msg').textContent = "รหัสไม่ถูกต้อง หรือไม่มีเมนูนี้";
       }
     }
+    // Enter key กดแล้วไปได้เลย
+    document.getElementById('code').addEventListener('keydown', function(e){
+      if(e.key === 'Enter') go();
+    });
   </script>
 </body>
 </html>
