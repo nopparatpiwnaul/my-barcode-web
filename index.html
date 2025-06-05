@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบบาร์โค้ด สถานีตำรวจภูธรพยัคฆภูมิพิสัย</title>
+  <title>เข้าสู่ระบบ สถานีตำรวจภูธรพยัคฆภูมิพิสัย</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     body {
@@ -17,49 +17,37 @@
     }
     .container {
       background: rgba(255,255,255,0.97);
-      padding: 48px 32px 36px;
+      padding: 44px 30px 32px;
       border-radius: 16px;
       box-shadow: 0px 5px 15px rgba(0,0,0,0.15);
       text-align: center;
       width: 90%;
       max-width: 400px;
     }
-    .header-logo {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 10px;
-    }
     h1 {
-      margin: 0 0 10px;
-      font-size: 1.6rem;
+      margin: 0 0 16px;
+      font-size: 1.5rem;
       font-weight: 500;
       color: #215c8b;
     }
-    h2 {
-      margin: 0 0 28px;
-      font-size: 1rem;
-      font-weight: 400;
-      color: #46637f;
-      letter-spacing: 1px;
-    }
     .input-group {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       text-align: left;
     }
     label {
       display: block;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 400;
       margin-bottom: 8px;
       color: #333;
     }
-    input[type="text"] {
+    input[type="text"], input[type="password"] {
       width: 100%;
       padding: 12px;
       font-size: 1.1rem;
       border: 1px solid #b4d2e7;
       border-radius: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       box-sizing: border-box;
       background: #f6fbff;
       color: #333;
@@ -85,6 +73,7 @@
       font-size: 1rem;
       min-height: 24px;
       margin-bottom: 8px;
+      text-align: left;
     }
     .footer {
       margin-top: 24px;
@@ -96,40 +85,47 @@
 </head>
 <body>
   <div class="container">
-    <!-- ถ้ามีโลโก้สถานี ให้ใส่ <img src="logo.png" class="header-logo" alt="logo"> -->
-    <h1>ระบบสร้างบาร์โค้ด<br>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</h1>
-    <h2>PHAYAKKHAPHUMPHISAI POLICE STATION</h2>
-    <div class="input-group">
-      <label for="code">กรอกรหัสโปรเจกต์/เมนู</label>
-      <input type="text" id="code" placeholder="เช่น project1, project2, docs">
+    <h1>เข้าสู่ระบบ<br>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</h1>
+    <form id="loginForm" onsubmit="event.preventDefault(); doLogin();">
+      <div class="input-group">
+        <label for="user">ชื่อผู้ใช้</label>
+        <input type="text" id="user" autocomplete="username" required>
+      </div>
+      <div class="input-group">
+        <label for="pass">รหัสผ่าน</label>
+        <input type="password" id="pass" autocomplete="current-password" required>
+      </div>
       <div id="msg" class="error"></div>
-    </div>
-    <button class="btn" onclick="go()">เข้าสู่ระบบ</button>
+      <button type="submit" class="btn">เข้าสู่ระบบ</button>
+    </form>
     <div class="footer">
       © 2025 สิบตำรวจเอก นพรัตน์ ผิวนวล
     </div>
   </div>
   <script>
-    // รหัสและลิงก์
-    const codeMap = {
-      "project1": "project1/index.html",
-      "project2": "project2/index.html",
-      "docs":     "docs/index.html"
-      // เพิ่มรหัสอื่นได้ที่นี่
+    // ตั้งค่าชื่อผู้ใช้/รหัสผ่าน/และหน้าที่จะลิงก์ไป
+    const userMap = {
+      "admin":    { pass: "123456", link: "project1/index.html" },
+      "john":     { pass: "abcdef", link: "project2/index.html" },
+      "staff":    { pass: "police", link: "docs/index.html" }
+      // เพิ่ม user ได้ตามต้องการ เช่น
+      // "nopparat": { pass: "xxxx", link: "projectX/index.html" }
     };
 
-    function go() {
-      const code = document.getElementById('code').value.trim();
-      if (codeMap[code]) {
-        window.location.href = codeMap[code];
+    function doLogin() {
+      const user = document.getElementById('user').value.trim();
+      const pass = document.getElementById('pass').value;
+      const msg = document.getElementById('msg');
+      if (user in userMap && userMap[user].pass === pass) {
+        // ลิงก์ไปหน้าตามที่กำหนด
+        window.location.href = userMap[user].link;
       } else {
-        document.getElementById('msg').textContent = "รหัสไม่ถูกต้อง หรือไม่มีเมนูนี้";
+        msg.textContent = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
       }
     }
-    // Enter key กดแล้วไปได้เลย
-    document.getElementById('code').addEventListener('keydown', function(e){
-      if(e.key === 'Enter') go();
-    });
+    // Enter key ใน input ก็ล็อกอินได้
+    document.getElementById('user').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+    document.getElementById('pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
   </script>
 </body>
 </html>
