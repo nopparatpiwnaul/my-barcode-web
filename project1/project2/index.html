@@ -317,77 +317,77 @@
             loadDatabase();
         }
 
-       function printBarcode() {
-    var printWindow = window.open("", "_blank");
+        function printBarcode() {
+            var printWindow = window.open("", "_blank");
 
-    // ใช้ setTimeout เพื่อให้แน่ใจว่าเนื้อหาถูกโหลดครบก่อนที่การพิมพ์จะเริ่ม
-    setTimeout(function() {
-        var barcodeHtml = document.getElementById("barcodeContainer").innerHTML;
+            // ใช้ setTimeout เพื่อให้แน่ใจว่าเนื้อหาถูกโหลดครบก่อนที่การพิมพ์จะเริ่ม
+            setTimeout(function() {
+                var barcodeHtml = document.getElementById("barcodeContainer").innerHTML;
 
-        var printContent = `
-            <html>
-            <head>
-                <title>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</title>
-                <style>
-                    body { font-family: 'Kanit', sans-serif; }
-                    .header-box {
-                        position: absolute;
-                        top: 20px;
-                        right: 20px;
-                        background-color: #78C1E5;
-                        padding: 10px;
-                        border-radius: 8px;
-                        color: white;
-                        font-weight: bold;
-                        text-align: center;
-                        font-size: 14px;
-                        width: 200px;
-                    }
-                    .content-box {
-                        margin-top: 50px;
-                        padding: 20px;
-                        border: 2px solid #333;
-                        border-radius: 8px;
-                    }
-                    .footer-box {
-                        margin-top: 30px;
-                        padding: 30px;
-                        border: 2px solid #333;
-                        border-radius: 8px;
-                        text-align: center;
-                        font-size: 16px;
-                    }
-                </style>
-            </head>
-            <body>
-                <p style="font-size: 20px; font-weight: bold; line-height: 1.5; color: #333; text-align: right;">
-                    สถานีตำรวจภูธรพยัคฆภูมิพิสัย <br>
-                    <span style="font-size: 13px; font-weight: normal;">PHAYAKKHAPHUMPHISAI POLICE STATION</span>
-                </p>
-               <div class="content-box" style="text-align: left; 
-padding: 30px; 
-background: #f9f9f9; 
-border: 2px solid #333; 
-border-radius: 8px;
-width: 700px;">
-    <h2 style="font-size: 22px; font-weight: bold; margin-bottom: 10px;">สำหรับชำระค่าปรับ</h2>
-    <p style="font-size: 16px; line-height: 1.6; margin-bottom: 10px; color: #333;">
-        กรุณาชำระค่าปรับตามจำนวนที่ระบุในบาร์โค้ด
-                    </p>
-                    <div id="barcodeContainer" style="text-align: left; padding: 12px; background: #fff; border: 2px solid #ccc; border-radius: 5px; display: inline-block;">
-                        ${barcodeHtml}
+                var printContent = `
+                    <html>
+                    <head>
+                        <title>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</title>
+                        <style>
+                            body { font-family: 'Kanit', sans-serif; }
+                            .header-box {
+                                position: absolute;
+                                top: 20px;
+                                right: 20px;
+                                background-color: #78C1E5;
+                                padding: 10px;
+                                border-radius: 8px;
+                                color: white;
+                                font-weight: bold;
+                                text-align: center;
+                                font-size: 14px;
+                                width: 200px;
+                            }
+                            .content-box {
+                                margin-top: 50px;
+                                padding: 20px;
+                                border: 2px solid #333;
+                                border-radius: 8px;
+                            }
+                            .footer-box {
+                                margin-top: 30px;
+                                padding: 30px;
+                                border: 2px solid #333;
+                                border-radius: 8px;
+                                text-align: center;
+                                font-size: 16px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <p style="font-size: 20px; font-weight: bold; line-height: 1.5; color: #333; text-align: right;">
+                            สถานีตำรวจภูธรพยัคฆภูมิพิสัย <br>
+                            <span style="font-size: 13px; font-weight: normal;">PHAYAKKHAPHUMPHISAI POLICE STATION</span>
+                        </p>
+                       <div class="content-box" style="text-align: left; 
+    padding: 30px; 
+    background: #f9f9f9; 
+    border: 2px solid #333; 
+    border-radius: 8px;
+    width: 700px;">
+        <h2 style="font-size: 22px; font-weight: bold; margin-bottom: 10px;">สำหรับชำระค่าปรับ</h2>
+        <p style="font-size: 16px; line-height: 1.6; margin-bottom: 10px; color: #333;">
+            กรุณาชำระค่าปรับตามจำนวนที่ระบุในบาร์โค้ด
+                        </p>
+                        <div id="barcodeContainer" style="text-align: left; padding: 12px; background: #fff; border: 2px solid #ccc; border-radius: 5px; display: inline-block;">
+                            ${barcodeHtml}
+                        </div>
+                        <p style="font-size: 16px; line-height: 1.6; margin-top: 10px; color: #333;"></p>
                     </div>
-                    <p style="font-size: 16px; line-height: 1.6; margin-top: 10px; color: #333;"></p>
-                </div>
-            </body>
-            </html>
-        `;
-        
-        printWindow.document.write(printContent);
-        printWindow.document.close();
-        printWindow.print();
-    }, 500);
-}
+                </body>
+                </html>
+            `;
+            
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.print();
+        }, 500);
+    }
 
 
         function exportToExcel() {
@@ -398,6 +398,28 @@ width: 700px;">
 
         function clearDatabase() {
             localStorage.removeItem("database");
+            loadDatabase();
+        }
+
+        function loadDatabase() {
+            var database = JSON.parse(localStorage.getItem("database")) || [];
+            var tbody = document.querySelector("#databaseTable tbody");
+            tbody.innerHTML = "";
+            database.forEach(function(entry, index) {
+                var row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${entry.ticketNumber}</td>
+                    <td>${entry.fineAmount}</td>
+                    <td>${entry.time}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function toggleDatabase() {
+            var dbContainer = document.getElementById("databaseContainer");
+            dbContainer.style.display = dbContainer.style.display === "block" ? "none" : "block";
             loadDatabase();
         }
 
