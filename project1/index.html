@@ -122,119 +122,6 @@
             font-size: 16px;
             color: #333;
         }
-        /* --- LOGIN MODAL --- */
-        .modal {
-            display: flex;
-            position: fixed;
-            z-index: 9999;
-            left: 0;
-            top: 0;
-            width: 100vw;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-            background: rgba(52, 64, 84, 0.13);
-            backdrop-filter: blur(2px);
-        }
-        .modal-content {
-            background: #fff;
-            border-radius: 15px;
-            padding: 35px 28px 25px 28px;
-            box-shadow: 0 6px 32px rgba(90,159,214,0.15);
-            min-width: 320px;
-            max-width: 95vw;
-            text-align: center;
-            border: 1px solid #e0e6ed;
-            position: relative;
-            animation: fadeInModal 0.45s cubic-bezier(.77,0,.18,1.01);
-        }
-        @keyframes fadeInModal {
-            from { opacity: 0; transform: translateY(30px);}
-            to   { opacity: 1; transform: none;}
-        }
-        .modal-content .icon-lock {
-            font-size: 34px;
-            color: #5A9FD6;
-            margin-bottom: 12px;
-            display: inline-block;
-        }
-        .modal-content h2 {
-            font-size: 22px;
-            margin: 0 0 17px 0;
-            font-weight: 600;
-            color: #1865b1;
-            letter-spacing: 0.5px;
-        }
-        .modal-content input[type="text"],
-        .modal-content input[type="password"] {
-            padding: 11px 14px;
-            font-size: 17px;
-            border: 1.5px solid #b4c9e6;
-            border-radius: 7px;
-            width: 100%;
-            margin-bottom: 15px;
-            background: #f7fafc;
-            transition: border-color 0.2s;
-            outline: none;
-        }
-        .modal-content input[type="text"]:focus,
-        .modal-content input[type="password"]:focus {
-            border-color: #5A9FD6;
-            background: #fafdff;
-        }
-        .modal-content .remember-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 15px;
-            justify-content: flex-start;
-        }
-        .modal-content .remember-row label {
-            margin: 0 0 0 7px;
-            color: #444;
-            font-weight: 400;
-            padding: 0;
-            min-width: unset;
-            font-size: 15px;
-            text-align: left;
-        }
-        .modal-content button {
-            background: linear-gradient(90deg, #5A9FD6 75%, #78C1E5 100%);
-            color: white;
-            border: none;
-            padding: 11px 0;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 7px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 2px;
-            box-shadow: 0 1px 2px rgba(90,159,214,0.08);
-            letter-spacing: 0.3px;
-            transition: background 0.18s, box-shadow 0.17s;
-        }
-        .modal-content button:hover {
-            background: linear-gradient(90deg, #78C1E5 60%, #5A9FD6 100%);
-            box-shadow: 0 2px 8px rgba(90,159,214,0.11);
-        }
-        .modal-content .error {
-            color: #d23131;
-            margin-bottom: 12px;
-            font-size: 15px;
-            background: #fff3f3;
-            border-radius: 5px;
-            padding: 7px 0;
-            letter-spacing: 0.2px;
-        }
-        .login-footer {
-            margin-top: 14px;
-            text-align: center;
-            color: #a8b5c6;
-            font-size: 13.5px;
-        }
-        @media (max-width: 400px) {
-            .modal-content { padding: 18px 4vw 12px 4vw; min-width: unset;}
-        }
         @media print {
             body * {
                 visibility: hidden;
@@ -303,23 +190,7 @@
     </style>
 </head>
 <body>
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="icon-lock">🔒</span>
-            <h2>เข้าสู่ระบบ</h2>
-            <div id="loginError" class="error" style="display:none"></div>
-            <input type="text" id="loginUser" placeholder="ชื่อผู้ใช้งาน" autocomplete="username">
-            <input type="password" id="loginPass" placeholder="รหัสผ่าน" autocomplete="current-password">
-            <div class="remember-row">
-                <input type="checkbox" id="rememberMe" style="width:18px;height:18px;vertical-align:middle;">
-                <label for="rememberMe">จดจำชื่อผู้ใช้</label>
-            </div>
-            <button onclick="doLogin()">เข้าสู่ระบบ</button>
-            <div class="login-footer">สำหรับเจ้าหน้าที่เท่านั้น</div>
-        </div>
-    </div>
-    <div class="container" id="mainContent" style="display:none">
+    <div class="container" id="mainContent">
         <div class="header">
             <h1>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</h1>
             <h2>PHAYAKKHAPHUMPHISAI POLICE STATION</h2>
@@ -347,73 +218,6 @@
         <div id="printArea" style="display:none"></div>
     </div>
     <script>
-        // ผู้ใช้ที่อนุญาต (เพิ่มได้มากกว่าหนึ่ง user)
-        const USERS = [
-            { user: "admin", pass: "123456" },
-            { user: "1440800241791", pass: "1791" },
-            { user: "1401100036461", pass: "6461" }
-        ];
-
-        // --- Remember Username Logic ---
-        function saveUserToStorage(username) {
-            localStorage.setItem('barcode_last_user', username);
-        }
-        function clearUserFromStorage() {
-            localStorage.removeItem('barcode_last_user');
-        }
-        function loadUserFromStorage() {
-            return localStorage.getItem('barcode_last_user') || "";
-        }
-
-        // --- Login Logic ---
-        function doLogin() {
-            const username = document.getElementById('loginUser').value.trim();
-            const password = document.getElementById('loginPass').value;
-            const errorDiv = document.getElementById('loginError');
-            const rememberMe = document.getElementById('rememberMe').checked;
-            const found = USERS.find(u => u.user === username && u.pass === password);
-
-            if (!username || !password) {
-                errorDiv.innerText = "กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน";
-                errorDiv.style.display = "block";
-                return;
-            }
-            if (found) {
-                errorDiv.style.display = "none";
-                if(rememberMe) {
-                    saveUserToStorage(username);
-                } else {
-                    clearUserFromStorage();
-                }
-                document.getElementById("loginModal").style.display = "none";
-                document.getElementById("mainContent").style.display = "block";
-            } else {
-                errorDiv.innerText = "ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง";
-                errorDiv.style.display = "block";
-                document.getElementById('loginPass').value = "";
-                document.getElementById('loginPass').focus();
-            }
-        }
-
-        // Enter key กดล็อกอินได้เลย
-        document.getElementById("loginPass").addEventListener("keyup", function(e) {
-            if (e.key === "Enter") doLogin();
-        });
-        document.getElementById("loginUser").addEventListener("keyup", function(e) {
-            if (e.key === "Enter") doLogin();
-        });
-
-        // โหลด username ถ้ามีจาก localStorage
-        window.onload = function() {
-            const savedUser = loadUserFromStorage();
-            if(savedUser) {
-                document.getElementById("loginUser").value = savedUser;
-                document.getElementById("rememberMe").checked = true;
-            }
-            document.getElementById("loginUser").focus();
-        };
-
-        // Barcode/QR code logic
         let lastTicketNumber = "";
         let lastFineAmount = "";
         let lastTimeString = "";
@@ -449,13 +253,11 @@
                 "จำนวนค่าปรับ: " + fineAmount + "<br>" +
                 "เวลา: " + timeString;
 
-            // Save data for print
             lastTicketNumber = ticketNumber;
             lastFineAmount = fineAmount;
             lastTimeString = timeString;
         }
 
-        // ให้หน่วงนิดเดียว (เร็วสุดแบบปลอดภัย)
         function printBarcode() {
             if (!lastTicketNumber || !lastFineAmount || !lastTimeString) {
                 alert("กรุณาสร้างบาร์โค้ดก่อนพิมพ์");
@@ -468,12 +270,11 @@
                     setTimeout(() => {
                         var qrcodeCanvas = document.getElementById("qrcode");
                         resolve(qrcodeCanvas.toDataURL());
-                    }, 60); // เร็วพิเศษ (60ms)
+                    }, 60);
                 });
             }
 
             getQrImageDataUrl().then(qrcodeImgData => {
-                // Barcode and QR code
                 var barcodeHtml = document.getElementById("barcodeContainer").innerHTML;
                 barcodeHtml = barcodeHtml.replace(
                     /<canvas[^>]*id="qrcode"[^>]*>.*?<\/canvas>/i,
