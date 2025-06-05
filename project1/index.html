@@ -1,11 +1,410 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>Project 1</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างและพิมพ์บาร์โค้ด</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script> <!-- เพิ่มไลบรารีสำหรับ Excel -->
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Kanit', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #78C1E5, #5A9FD6, #3A7D7C);
+            position: relative;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 30px 30px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            box-sizing: border-box;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .header {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .header h2 {
+            font-size: 12px;
+            font-weight: 400;
+            margin: 0;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 15px 0;
+            padding-left: 10px;
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            flex: 1;
+            text-align: right;
+            padding-right: 15px;
+            min-width: 140px;
+            white-space: nowrap;
+        }
+
+        input {
+            flex: 2;
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #78C1E5, #5A9FD6);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+            margin: 8px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #5A9FD6, #78C1E5);
+        }
+
+        #barcodeContainer {
+            margin-top: 25px;
+            padding: 25px;
+            background: #f2f2f2;
+            border-radius: 10px;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid #333;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+        }
+
+        #barcode {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .database-container {
+            margin-top: 30px;
+            text-align: left;
+            display: none; /* Initially hidden */
+        }
+
+        table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        th {
+            background-color: #5A9FD6;
+            color: white;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #printArea, #printArea * {
+                visibility: visible;
+            }
+
+            #printArea {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            /* กรอบที่มุมขวาบนสำหรับหน้าพิมพ์ */
+            .header-box {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background-color: #78C1E5;
+                padding: 10px;
+                border-radius: 8px;
+                color: white;
+                font-weight: bold;
+                text-align: center;
+                font-size: 14px;
+                width: 200px;
+            }
+
+            /* เพิ่มกรอบรอบๆ ข้อมูลทั้งหมด */
+            .content-box {
+                margin-top: 50px;
+                padding: 20px;
+                border: 2px solid #333;
+                border-radius: 8px;
+            }
+
+            .content-box h2 {
+                font-size: 18px;
+            }
+
+            .content-box p {
+                font-size: 16px;
+            }
+
+            /* กรอบรอบบาร์โค้ด */
+            #barcodeContainer {
+                margin-top: 25px;
+                padding: 25px;
+                background: #f2f2f2;
+                border-radius: 10px;
+                box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+                border: 2px solid #333;
+                width: 100%;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+                overflow: hidden;
+            }
+
+            #barcode {
+                max-width: 100%;
+                max-height: 100%;
+            }
+
+            /* กรอบรอบข้อมูลทั้งหมด */
+            .footer-box {
+                margin-top: 30px;
+                padding: 15px;
+                border: 2px solid #333;
+                border-radius: 8px;
+                text-align: center;
+                font-size: 16px;
+            }
+        }
+    </style>
+  </head>
 <body>
   <h1>หน้านี้คือ Project 1</h1>
+    <div class="container">
+        <div class="header">
+            <h1>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</h1>
+            <h2>PHAYAKKHAPHUMPHISAI POLICE STATION</h2>
+        </div>
+
+        <form id="barcodeForm">
+            <div class="form-group">
+                <label for="ticketNumber">เลขที่ใบสั่ง:</label>
+                <input type="text" id="ticketNumber" placeholder="กรอกเลขที่ใบสั่ง">
+            </div>
+            <div class="form-group">
+                <label for="fineAmount">จำนวนค่าปรับ:</label>
+                <input type="text" id="fineAmount" placeholder="กรอกจำนวนค่าปรับ">
+            </div>
+
+            <div class="button-container">
+                <button type="button" onclick="generateBarcode()">สร้างบาร์โค้ด</button>
+                <button type="button" onclick="printBarcode()">พิมพ์</button>
+                <button type="button" onclick="toggleDatabase()">ข้อมูลรายวัน</button>
+            </div>
+        </form>
+
+        <div id="barcodeContainer">
+            <svg id="barcode"></svg>
+            <div id="barcodeText" class="barcode-text"></div>
+        </div>
+
+        <div class="footer">สร้างโดย สิบตำรวจเอก นพรัตน์ ผิวนวล</div>
+
+        <div class="database-container" id="databaseContainer">
+            <h2>ข้อมูลรายวัน</h2>
+            <table id="databaseTable">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>เลขที่ใบสั่ง</th>
+                        <th>จำนวนค่าปรับ</th>
+                        <th>เวลา</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <button type="button" onclick="exportToExcel()">ส่งออกเป็น Excel</button>
+            <button type="button" onclick="clearDatabase()">ล้างข้อมูล</button>
+        </div>
+    </div>
+
+    <script>
+        function generateBarcode() {
+            var fixedLine1 = "|099400015904822";
+            var ticketNumber = document.getElementById("ticketNumber").value.trim();
+            var fineAmount = document.getElementById("fineAmount").value.trim();
+            var barcodeFineAmount = fineAmount + "00";
+
+            if (!ticketNumber || !fineAmount) {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+                return;
+            }
+
+            var barcodeData = fixedLine1 + "\n" + ticketNumber + "\n\n" + barcodeFineAmount;
+
+            JsBarcode("#barcode", barcodeData, {
+                format: "CODE128",
+                displayValue: false
+            });
+
+            var currentDate = new Date();
+            var timeString = currentDate.toLocaleString();
+
+            document.getElementById("barcodeText").innerHTML =
+                "เลขที่ใบสั่ง: " + ticketNumber + "<br>" +
+                "จำนวนค่าปรับ: " + fineAmount + "<br>" +
+                "เวลา: " + timeString;
+
+            // Add data to the database
+            var database = JSON.parse(localStorage.getItem("database")) || [];
+            database.push({ ticketNumber, fineAmount, time: timeString });
+            localStorage.setItem("database", JSON.stringify(database));
+            loadDatabase();
+        }
+
+       function printBarcode() {
+    var printWindow = window.open("", "_blank");
+
+    // ใช้ setTimeout เพื่อให้แน่ใจว่าเนื้อหาถูกโหลดครบก่อนที่การพิมพ์จะเริ่ม
+    setTimeout(function() {
+        var barcodeHtml = document.getElementById("barcodeContainer").innerHTML;
+
+        var printContent = `
+            <html>
+            <head>
+                <title>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</title>
+                <style>
+                    body { font-family: 'Kanit', sans-serif; }
+                    .header-box {
+                        position: absolute;
+                        top: 20px;
+                        right: 20px;
+                        background-color: #78C1E5;
+                        padding: 10px;
+                        border-radius: 8px;
+                        color: white;
+                        font-weight: bold;
+                        text-align: center;
+                        font-size: 14px;
+                        width: 200px;
+                    }
+                    .content-box {
+                        margin-top: 50px;
+                        padding: 20px;
+                        border: 2px solid #333;
+                        border-radius: 8px;
+                    }
+                    .footer-box {
+                        margin-top: 30px;
+                        padding: 30px;
+                        border: 2px solid #333;
+                        border-radius: 8px;
+                        text-align: center;
+                        font-size: 16px;
+                    }
+                </style>
+            </head>
+            <body>
+                <p style="font-size: 20px; font-weight: bold; line-height: 1.5; color: #333; text-align: right;">
+                    สถานีตำรวจภูธรพยัคฆภูมิพิสัย <br>
+                    <span style="font-size: 13px; font-weight: normal;">PHAYAKKHAPHUMPHISAI POLICE STATION</span>
+                </p>
+               <div class="content-box" style="text-align: left; 
+padding: 30px; 
+background: #f9f9f9; 
+border: 2px solid #333; 
+border-radius: 8px;
+width: 700px;">
+    <h2 style="font-size: 22px; font-weight: bold; margin-bottom: 10px;">สำหรับชำระค่าปรับ</h2>
+    <p style="font-size: 16px; line-height: 1.6; margin-bottom: 10px; color: #333;">
+        กรุณาชำระค่าปรับตามจำนวนที่ระบุในบาร์โค้ด
+                    </p>
+                    <div id="barcodeContainer" style="text-align: left; padding: 12px; background: #fff; border: 2px solid #ccc; border-radius: 5px; display: inline-block;">
+                        ${barcodeHtml}
+                    </div>
+                    <p style="font-size: 16px; line-height: 1.6; margin-top: 10px; color: #333;"></p>
+                </div>
+  
   <a href="../index.html">กลับหน้าแรก</a>
+</body>
+</html>
+        `;
+        
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    }, 500);
+}
+
+
+        function exportToExcel() {
+            var table = document.getElementById("databaseTable");
+            var wb = XLSX.utils.table_to_book(table, {sheet:"Database"});
+            XLSX.writeFile(wb, "Database.xlsx");
+        }
+
+        function clearDatabase() {
+            localStorage.removeItem("database");
+            loadDatabase();
+        }
+
+        loadDatabase();
+    </script>
 </body>
 </html>
