@@ -3,127 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เข้าสู่ระบบ สถานีตำรวจภูธรพยัคฆภูมิพิสัย</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>เข้าสู่ระบบ</title>
   <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: 'Kanit', sans-serif;
-      background: linear-gradient(135deg, #78C1E5, #5A9FD6, #3A7D7C);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .container {
-      background: rgba(255,255,255,0.97);
-      padding: 44px 30px 32px;
-      border-radius: 16px;
-      box-shadow: 0px 5px 15px rgba(0,0,0,0.15);
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
-    }
-    h1 {
-      margin: 0 0 16px;
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: #215c8b;
-    }
-    .input-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    label {
-      display: block;
-      font-size: 1.05rem;
-      font-weight: 400;
-      margin-bottom: 8px;
-      color: #333;
-    }
-    input[type="text"], input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1rem;
-      border: 1px solid #b4d2e7;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-      background: #f6fbff;
-      color: #333;
-    }
-    .btn {
-      width: 100%;
-      background: linear-gradient(135deg, #78C1E5, #5A9FD6);
-      color: #fff;
-      border: none;
-      padding: 12px 0;
-      font-size: 1.1rem;
-      font-weight: 500;
-      border-radius: 7px;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-bottom: 12px;
-    }
-    .btn:hover {
-      background: linear-gradient(135deg, #5A9FD6, #78C1E5);
-    }
-    .error {
-      color: #d14;
-      font-size: 1rem;
-      min-height: 24px;
-      margin-bottom: 8px;
-      text-align: left;
-    }
-    .footer {
-      margin-top: 24px;
-      color: #46637f;
-      font-size: 0.95rem;
-      opacity: 0.85;
-    }
+    body { font-family: 'Kanit', sans-serif; background: #e6f3ff; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .login-box { background: #fff; border-radius: 12px; box-shadow: 0 4px 18px #b0cfff44; padding: 36px 28px; width: 90%; max-width: 350px; }
+    .login-box h2 { margin-top: 0; }
+    input { width: 100%; padding: 10px; font-size: 1.1rem; border-radius: 6px; border: 1px solid #aad; margin-bottom: 18px; }
+    button { width: 100%; background: #5a9fd6; color: #fff; padding: 12px; border: none; border-radius: 7px; font-size: 1.1rem; cursor: pointer; }
+    button:hover { background: #3576ab; }
+    .error { color: #c00; min-height: 24px; text-align: left; font-size: 1rem; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>เข้าสู่ระบบ<br>สถานีตำรวจภูธรพยัคฆภูมิพิสัย</h1>
-    <form id="loginForm" onsubmit="event.preventDefault(); doLogin();">
-      <div class="input-group">
-        <label for="user">ชื่อผู้ใช้</label>
-        <input type="text" id="user" autocomplete="username" required>
-      </div>
-      <div class="input-group">
-        <label for="pass">รหัสผ่าน</label>
-        <input type="password" id="pass" autocomplete="current-password" required>
-      </div>
-      <div id="msg" class="error"></div>
-      <button type="submit" class="btn">เข้าสู่ระบบ</button>
-    </form>
-    <div class="footer">
-      © 2025 สิบตำรวจเอก นพรัตน์ ผิวนวล
-    </div>
+  <div class="login-box">
+    <h2>เข้าสู่ระบบ</h2>
+    <input type="text" id="user" placeholder="ชื่อผู้ใช้">
+    <input type="password" id="pass" placeholder="รหัสผ่าน">
+    <div class="error" id="msg"></div>
+    <button onclick="doLogin()">เข้าสู่ระบบ</button>
   </div>
   <script>
-    // ตั้งค่าชื่อผู้ใช้/รหัสผ่าน/และหน้าที่จะลิงก์ไป
+    // ตั้งค่าชื่อผู้ใช้/รหัสผ่าน และหน้าที่จะลิงก์ไป
     const userMap = {
-      "admin":    { pass: "123456", link: "project1/index.html" },
-      "john":     { pass: "abcdef", link: "project2/index.html" },
-      "staff":    { pass: "police", link: "docs/index.html" }
-      // เพิ่ม user ได้ตามต้องการ เช่น
-      // "nopparat": { pass: "xxxx", link: "projectX/index.html" }
+      "user1": { pass: "1234", link: "project1/index.html" },
+      "user2": { pass: "5678", link: "project2/index.html" }
+      // เพิ่ม user ได้ตามต้องการ
     };
 
     function doLogin() {
       const user = document.getElementById('user').value.trim();
       const pass = document.getElementById('pass').value;
-      const msg = document.getElementById('msg');
       if (user in userMap && userMap[user].pass === pass) {
-        // ลิงก์ไปหน้าตามที่กำหนด
         window.location.href = userMap[user].link;
       } else {
-        msg.textContent = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+        document.getElementById('msg').textContent = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
       }
     }
-    // Enter key ใน input ก็ล็อกอินได้
+    // Enter ก็ล็อกอินได้
     document.getElementById('user').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
     document.getElementById('pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
   </script>
